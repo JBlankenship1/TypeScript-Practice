@@ -2,21 +2,43 @@
 //node TypeScript-1.ts
 
 // Example code to see if the TypeScript compiler is working
-let a: number = 10;
-console.log(a);
-let b: number = a + 23;
-let c: number = 2 * b;
-console.log(c);
+// let a: number = 10;
+// console.log(a);
+// let b: number = a + 23;
+// let c: number = 2 * b;
+// console.log(c);
 
 // Problem 1
 // Write a function cumulative_sum that takes an array of numbers and returns a array of the partial 
 // sums of these numbers. For example, cumulative_sum([12, 27, 13]) = [12, 39, 52].
+function cumulative_sum(array: number[]): number[] {
+    array.forEach((element, index) => {
+        if (index != 0) { 
+         array[index] = element + (array[index - 1] ?? 0);
+        }
+    });
+    return array;
+}
+
+var int_arr: number[] = [12,27,13];
+console.log("Problem 1 answer with input", int_arr, ":", cumulative_sum(int_arr));
 
 
 // Problem 2
 // Write a function search that takes two arguments xs and n. It should return the index of the first 
 // appearance of n in xs. For example, search([1, 3, 5, 3, 1], 3) should return 1.
 // If n does not appear in xs, you should return undefined
+
+function search(xs: number[], n: number): number{
+    xs.forEach((element, index) => {
+        if (element == n) { return index}
+    })
+    return 1;
+}
+
+int_arr = [1, 3, 5, 3, 1];
+var int: number = 3;
+console.log("Problem 2 answer with inputs", int_arr, "and", int, ":", search(int_arr, int));
 
 
 // Problem 3
@@ -30,6 +52,7 @@ console.log(c);
 // - to_int should take a nat and produce the equivalent int. For example, to_int Zero should produce 0 and to_int 
 // (Succ (Succ Zero)) should produce 2
 // - from_int should take an int and produce the equivalent nat. You can assume the int is not negative
+
 
 
 // Problem 4
