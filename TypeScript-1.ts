@@ -11,13 +11,13 @@
 // Problem 1
 // Write a function cumulative_sum that takes an array of numbers and returns a array of the partial 
 // sums of these numbers. For example, cumulative_sum([12, 27, 13]) = [12, 39, 52].
-function cumulative_sum(array: number[]): number[] {
-    array.forEach((element, index) => {
+function cumulative_sum(l: number[]): number[] {
+    l.forEach((element, index) => {
         if (index != 0) { 
-         array[index] = element + (array[index - 1] ?? 0);
+         l[index] = element + (l[index - 1] ?? 0);
         }
     });
-    return array;
+    return l;
 }
 
 var int_arr: number[] = [12,27,13];
@@ -29,11 +29,11 @@ console.log("Problem 1 answer with input", int_arr, ":", cumulative_sum(int_arr)
 // appearance of n in xs. For example, search([1, 3, 5, 3, 1], 3) should return 1.
 // If n does not appear in xs, you should return undefined
 
-function search(xs: number[], n: number): number{
-    xs.forEach((element, index) => {
-        if (element == n) { return index}
+function search(l: number[], n: number): number | undefined{
+    l.forEach((element, index) => {
+        if (element === n) { return index}
     })
-    return 1;
+    return undefined;
 }
 
 int_arr = [1, 3, 5, 3, 1];
@@ -52,20 +52,64 @@ console.log("Problem 2 answer with inputs", int_arr, "and", int, ":", search(int
 // - to_int should take a nat and produce the equivalent int. For example, to_int Zero should produce 0 and to_int 
 // (Succ (Succ Zero)) should produce 2
 // - from_int should take an int and produce the equivalent nat. You can assume the int is not negative
+class Succ { 
+    readonly n: Succ | undefined; 
+    constructor(n: Succ | undefined) {
+        this.n = n; 
+    } 
+}
+type Nat = Succ | undefined;
+const Zero: Nat = undefined;
+
+function to_int(x: Nat): number {
+    var n: number = 0;
+    while (x !== undefined) {
+        n += 1;
+        x = x.n;
+    }
+    return n;
+}
+
+function from_int(x: number): Nat {
+    var nat: Nat = Zero;
+    while (x > 0) {
+        x -= 1;
+        nat = new Succ(nat);
+    }
+    return nat;
+}
 
 
+var successor: Nat = new Succ(new Succ(Zero));
+var int: number = 3;
+console.log("Problem 3 function to_int answer with inputs", successor, ":", to_int(successor));
+console.log("Problem 3 function from_int answer with inputs", int, ":", from_int(int));
 
 // Problem 4
 // Write a function sequence that takes 3 int arguments called spacing, low, and high. It should return an 
 // int list of numbers from low to high (possibly including high) separated by spacing in sorted order. Assume 
 // spacing is positive and must use a loop.
+function sequence(s: number, l: number, h: number): number[] {
+    var arr: number[] = [];
+    while (l < h) {
+        arr.push(l);
+        l = l + s;
+    }
+    return arr;
+}
 
+var spacing: number = 18;
+var low: number = 0;
+var high: number = 381;
+console.log("Problem 4 function squesence with inputs", spacing, low, "and", high, ":", sequence(spacing,low,high));
 
 // Problem 5
 // Write a function string_append_map that takes a string list called xs and a string called suffix and returns a 
 // string list. Each element of the output should be the corresponding element of the input appended with suffix 
 // (with no extra space between the element and suffix).
-
+function string_append_map(l: string[], s: string): string[] {
+    
+}
 
 // Problem 6a
 // Create a class Expr with the following subtypes:
