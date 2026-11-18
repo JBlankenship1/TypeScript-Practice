@@ -225,17 +225,17 @@ console.log("\nProblem 7 function evaluate_env with inputs", env_expression, "an
 // If the filter function returns true, apply the map function and append to the result
 // You should only traverse the input list once (a loop is required)!
 function filtermap<T, U>(filterf: (v: T) => boolean, mapf: (v: T) => U, l: T[]): U[] {
-    let newl: U[] = [];
-    l.map((element) => {
-        if(filterf(element)) {
+    const newl: U[] = [];
+    for (const element of l) {
+        if (filterf(element)) {
             newl.push(mapf(element));
         }
-    })
+    }
     return newl;
 }
 
-let filterfunc: (v: T) => boolean = (n) => n % 2 === 0;
-let mapfunc: (v: T) => U = (n) => `Num: ${n * 10}`;
+let filterfunc: (v: number) => boolean = (n) => n % 2 === 0;
+let mapfunc: (v: number) => string = (n) => `Num: ${n * 10}`;
 int_arr = [1, 2, 3, 4, 5, 6];
 console.log("\nProblem 8 function filtermap with inputs", filterfunc, mapfunc, "and", int_arr, "returns:", filtermap(filterfunc, mapfunc, int_arr));
 
@@ -248,12 +248,9 @@ console.log("\nProblem 8 function filtermap with inputs", filterfunc, mapfunc, "
 
 function makesay(s: string): (os: string) => string {
     return function saymake(os: string) {
-        s = s + " " + os;
-        return s;
+        return s + " " + os;
     }
 }
-
-
 
 let str1: string = "hello";
 let str2: string = "world";
