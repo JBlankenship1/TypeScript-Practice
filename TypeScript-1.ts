@@ -12,12 +12,11 @@
 // Write a function cumulative_sum that takes an array of numbers and returns a array of the partial 
 // sums of these numbers. For example, cumulative_sum([12, 27, 13]) = [12, 39, 52].
 function cumulative_sum(l: number[]): number[] {
-    l.forEach((element, index) => {
-        if (index != 0) { 
-         l[index] = element + (l[index - 1] ?? 0);
-        }
+    let sum = 0;
+    return l.map((element) => {
+        sum += element;
+        return sum;
     });
-    return l;
 }
 
 var int_arr: number[] = [12,27,13];
@@ -29,10 +28,12 @@ console.log("\nProblem 1 answer with input", int_arr, "returns:", cumulative_sum
 // appearance of n in xs. For example, search([1, 3, 5, 3, 1], 3) should return 1.
 // If n does not appear in xs, you should return undefined
 
-function search(l: number[], n: number): number | undefined{
-    l.forEach((element, index) => {
-        if (element === n) { return index}
-    })
+function search(l: number[], n: number): number | undefined {
+    for (let i = 0; i < l.length; i++) {
+        if (l[i] === n) {
+            return i;
+        }
+    }
     return undefined;
 }
 
@@ -79,19 +80,22 @@ function from_int(x: number): Nat {
     return nat;
 }
 
+function add (x: Nat, y: Nat): Nat {
+    return from_int(to_int(x) + to_int(y));
+}
 
 var successor: Nat = new Succ(new Succ(Zero));
 var int: number = 3;
 console.log("\nProblem 3 function to_int answer with inputs", successor, "returns:", to_int(successor));
 console.log("\nProblem 3 function from_int answer with inputs", int, "returns:", from_int(int));
-
+console.log("\nProblem 3 function add answer with inputs", successor, "and", successor, "returns:", add(successor, successor));
 // Problem 4
 // Write a function sequence that takes 3 int arguments called spacing, low, and high. It should return an 
 // int list of numbers from low to high (possibly including high) separated by spacing in sorted order. Assume 
 // spacing is positive and must use a loop.
 function sequence(s: number, l: number, h: number): number[] {
     var arr: number[] = [];
-    while (l < h) {
+    while (l <= h) {
         arr.push(l);
         l = l + s;
     }
@@ -220,14 +224,40 @@ console.log("\nProblem 7 function evaluate_env with inputs", env_expression, "an
 // If the filter function returns false, drop the element
 // If the filter function returns true, apply the map function and append to the result
 // You should only traverse the input list once (a loop is required)!
+function filtermap<T, U>(filterf: (v: T) => boolean, mapf: (v: T) => U, l: T[]): U[] {
+    let newl: U[] = [];
+    l.map((element) => {
+        if(filterf(element)) {
+            newl.push(mapf(element));
+        }
+    })
+    return newl;
+}
+
+let filterfunc: (v: T) => boolean = (n) => n % 2 === 0;
+let mapfunc: (v: T) => U = (n) => `Num: ${n * 10}`;
+int_arr = [1, 2, 3, 4, 5, 6];
+console.log("\nProblem 8 function filtermap with inputs", filterfunc, mapfunc, "and", int_arr, "returns:", filtermap(filterfunc, mapfunc, int_arr));
 
 
 // Problem 9
 // write a function makesay(s: string): (os: string) => string
 // The makesay function will take a string and return a new function that when called appends the original 
 // string (a space) and then the argument string
-// e.g. (makesay("hello"))("world") will output "helloworld"
+// e.g. (makesay("hello"))("world") will output "hello world"
 
+function makesay(s: string): (os: string) => string {
+    return function saymake(os: string) {
+        s = s + " " + os;
+        return s;
+    }
+}
+
+
+
+let str1: string = "hello";
+let str2: string = "world";
+console.log("\nProblem 9 function makesay with inputs", str1, "and", str2, "returns:", makesay(str1)(str2));
 
 // Problem 10:
 // Given the definitions:
@@ -242,3 +272,42 @@ console.log("\nProblem 7 function evaluate_env with inputs", env_expression, "an
 // write a function maxdepth(t: Tree): number 
 // This function should compute the deepest node in the tree (where the undefined empty tree is 0).
 
+class TLeaf {
+}
+class TNode {
+    left: Tree;
+    right: Tree;
+    constructor(left: Tree, right: Tree) { 
+        this.left = left; 
+        this.right = right; 
+    }
+}
+type Tree = TLeaf | TNode | undefined;
+
+function maxdepth(t: Tree): number {
+    let depth: number = 0;
+    let depth_set: number[] = [];
+    function traverse(t: Tree, d: number): void {
+        if (t instanceof TNode) {
+            traverse(t.left, d + 1);
+            traverse(t.right, d + 1);
+        } else if (t instanceof TLeaf) {
+            depth_set.push(d + 1);
+        } else {
+            depth_set.push(d);
+        }
+    }
+    traverse(t, depth);
+    return(depth_set.reduce((max, current) => Math.max(max, current), 0));
+}
+
+
+
+let tree: Tree = new TNode(
+    new TLeaf(), 
+    new TNode(
+        undefined, 
+        new TNode(new TLeaf(), undefined)
+    )
+);
+console.log("\nProblem 10 function maxdepth with inputs", tree, "returns:", maxdepth(tree));
