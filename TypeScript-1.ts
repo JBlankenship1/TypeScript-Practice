@@ -21,7 +21,7 @@ function cumulative_sum(l: number[]): number[] {
 }
 
 var int_arr: number[] = [12,27,13];
-console.log("Problem 1 answer with input", int_arr, ":", cumulative_sum(int_arr));
+console.log("\nProblem 1 answer with input", int_arr, "returns:", cumulative_sum(int_arr));
 
 
 // Problem 2
@@ -38,7 +38,7 @@ function search(l: number[], n: number): number | undefined{
 
 int_arr = [1, 3, 5, 3, 1];
 var int: number = 3;
-console.log("Problem 2 answer with inputs", int_arr, "and", int, ":", search(int_arr, int));
+console.log("\nProblem 2 answer with inputs", int_arr, "and", int, "returns:", search(int_arr, int));
 
 
 // Problem 3
@@ -82,8 +82,8 @@ function from_int(x: number): Nat {
 
 var successor: Nat = new Succ(new Succ(Zero));
 var int: number = 3;
-console.log("Problem 3 function to_int answer with inputs", successor, ":", to_int(successor));
-console.log("Problem 3 function from_int answer with inputs", int, ":", from_int(int));
+console.log("\nProblem 3 function to_int answer with inputs", successor, "returns:", to_int(successor));
+console.log("\nProblem 3 function from_int answer with inputs", int, "returns:", from_int(int));
 
 // Problem 4
 // Write a function sequence that takes 3 int arguments called spacing, low, and high. It should return an 
@@ -101,15 +101,25 @@ function sequence(s: number, l: number, h: number): number[] {
 var spacing: number = 18;
 var low: number = 0;
 var high: number = 381;
-console.log("Problem 4 function squesence with inputs", spacing, low, "and", high, ":", sequence(spacing,low,high));
+console.log("\nProblem 4 function sequence with inputs", spacing, low, "and", high, "returns:", sequence(spacing,low,high));
 
 // Problem 5
 // Write a function string_append_map that takes a string list called xs and a string called suffix and returns a 
 // string list. Each element of the output should be the corresponding element of the input appended with suffix 
 // (with no extra space between the element and suffix).
 function string_append_map(l: string[], s: string): string[] {
-    
+    return l.map((element) => { 
+        return element += s; 
+    })
 }
+
+var string_list: string[] = [
+  "a", "b", "c", "d", "e", "f", "g", "h", "i", 
+  "j", "k", "l", "m", "n", "o", "p", "q", "r", 
+  "s", "t", "u", "v", "w", "x", "y", "z"];
+  
+var string: string = "abracadabra";
+console.log("\nProblem 5 function string_append_map with inputs", string_list, "and", string, "returns:", string_append_map(string_list,string));
 
 // Problem 6a
 // Create a class Expr with the following subtypes:
@@ -117,22 +127,91 @@ function string_append_map(l: string[], s: string): string[] {
 // - Plus, which represents "+"
 // - Minus, which represents "-"
 // - Mul, which represents "*"
+class Expr  {}
 
+class Literal extends Expr {
+    n: number;
+    constructor(v: number) {
+        super();
+        this.n = v;
+    }
+}
+class Plus extends Expr {
+    left: Expr;
+    right: Expr;
+    constructor(l: Expr, r: Expr) {
+        super();
+        this.left = l;
+        this.right = r;
+    }
+}
+class Minus extends Expr {
+    left: Expr;
+    right: Expr;
+    constructor(l: Expr, r: Expr) {
+        super();
+        this.left = l;
+        this.right = r;
+    }
+}
+class Mul extends Expr {
+    left: Expr;
+    right: Expr;
+    constructor(l: Expr, r: Expr) {
+        super();
+        this.left = l;
+        this.right = r;
+    }
+}
 
 // Problem 6b
 // Write a function evaluate(exp: Expr): number.
 // The function should evaluate the expression defined in 6a and return the result
+function evaluate(exp: Expr): number {
+    if (exp instanceof Literal) {
+        return exp.n;
+    } else if (exp instanceof Plus) {
+        return evaluate(exp.left) + evaluate(exp.right);
+    } else if (exp instanceof Minus) {
+        return evaluate(exp.left) - evaluate(exp.right);
+    } else if (exp instanceof Mul) {
+        return evaluate(exp.left) * evaluate(exp.right);
+    } else {
+        // Invalid
+        return 1;
+    }
+}
 
+var expression: Expr = new Mul(new Plus(new Literal(5), new Literal(3)), new Literal(2));
+console.log("\nProblem 6 function evaluate with inputs", expression, "returns:", evaluate(expression));
 
 // Problem 7a
 // Write a new VExpr class that extents Expr and also has a subtype
 // - Var string, which is a variable name
-
+class VExpr extends Expr {
+    s: string;
+    constructor(v: string) {
+        super();
+        this.s = v;
+    }
+}
 
 // Problem 7b
 // Write a function evaluate_env(exp: VExpr, env: [string, number][]): number | undefined
 // The function should evaluate the expression in 7a under the bindings, return undefined if a variable
 // appears that is not contained in the environment.
+function evaluate_env(exp: VExpr, env: [string, number][]): number | undefined {
+    let contained_var = env.find(vars => vars[0] === exp.s);
+    if (contained_var) {
+        return contained_var[1];
+    }
+    return undefined;
+}
+
+
+let env_expression: VExpr = new VExpr("x");
+let env_set: [string, number][] = [["x", 5], ["y", 43], ["z", 12]];
+console.log("\nProblem 7 function evaluate_env with inputs", env_expression, "and", env_set, "returns:", evaluate_env(env_expression, env_set));
 
 
 // Problem 8
